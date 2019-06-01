@@ -20,6 +20,47 @@ macro_rules! result_commit {
 }
 // DOC DEVELOPERS: more info about designators to macros: https://doc.rust-lang.org/rust-by-example/macros/designators.html
 
+trait Script {
+
+    // @TODO pending init big_commands variables
+
+    fn result(&self,code: i32,output: String, error: String) -> (&i32, &String, &str);
+
+    fn run_git_command(&self, big_commands: &str) {
+        let mut options = ScriptOptions::new();
+        options.runner = None; // The script runner, for example bash. By default for windows it's cmd.exe and for other systems it is sh.
+        options.capture_output = true; // True to capture and return the output. False will print it to the parent process output.
+        options.exit_on_error = false; // Adds set -e option (not available for windows)
+        options.print_commands = false; // Adds set -x option (not available for windows)
+        let args = vec![];
+        let (code, output, error) = run_script::run(
+            &format!(r#" {} "#, &big_commands).to_string(),
+            &args,
+            &options
+        ).unwrap();
+        self.result(code, output, error);
+    }
+}
+
+struct Commit {
+    pub relative_path_file: String,
+    pub path_project: String,
+    pub message: String,
+    pub date_commit: String,
+    pub result: (i32, String, str)
+}
+
+impl Script for Commit {
+    fn result(&self, code: i32,output: String, error: String) -> (&i32, &String, &str) {
+        let mut error: &str = "Without Errors :)";
+        if &self.result.2 != "" {
+            error = &self.result.2;
+        }
+        return (&self.result.0, &self.result.1, &error);
+    }
+    // @TODO pending logic to create big command
+}
+
 
 fn system_time_to_date_time(t: &SystemTime) -> DateTime<UTC> {
     let (sec, nsec) = match t.duration_since(UNIX_EPOCH) {
@@ -105,6 +146,7 @@ fn init_repo (path_object: &Path) {
         &vec![],
         &options
     ).unwrap();
+    // @TODO pending replace by impl
     result_commit!(error, code, output);
 }
 
