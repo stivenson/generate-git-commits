@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.com/stivenson/generate-git-commits.svg?branch=master)](https://travis-ci.com/stivenson/generate-git-commits)
 
-App to generate commits' history of any folder with code and/or others files; The commits' dates will be to according to the last update of each found file.
+App to generate commit history of any folder with code and/or others files; The commits' dates will be to according to the last update of each found file.
 
   
   
