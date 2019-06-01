@@ -101,7 +101,7 @@ See also the list of [contributors](contributing.md) who participated in this pr
 
 | Date        | Version | Description |
 | ----------- | ------- | ----------- |
-| 2019-04-30  | v0.1.0  | Initial release. |
+| 2019-05-31  | v0.1.0  | Initial release. |
 
 
  
