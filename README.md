@@ -51,7 +51,7 @@ After cloned the project, run this two commands:
   2.  ``` bash cargo build ```
   
   ----------------------------
-|:heavy_exclamation_mark: Caution; This command delete the .git folder, if there is found in the specified directory. check first if this is what you want. |  |
+|:heavy_exclamation_mark: Caution; The next command delete the .git folder, if there is found in the specified directory. check first if this is what you want. |  |
 |-------------------------------------------------------------------------------------------------|--|
 |                                                                                                 |  |
 
