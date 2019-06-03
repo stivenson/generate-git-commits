@@ -1,5 +1,4 @@
 extern crate generate_commits;
-extern crate run_script;
 
 use std::path::Path;
 

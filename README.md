@@ -73,7 +73,7 @@ And ready, you just have to wait for the process to finish. :tada::+1:
 
 ##  Running the tests
 
-> The tests are in development.
+- `cargo test -- --nocapture`
 
   
 

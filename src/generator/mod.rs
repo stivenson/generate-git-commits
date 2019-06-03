@@ -156,7 +156,7 @@ fn manage_dirs(path_project: &Path, dir: &Path, entry: &DirEntry) {
     }
 }
 
-fn process_dirs(dir: &Path, cb: &Fn(&Path, &Path, &DirEntry)) -> Result<()> {
+fn process_dirs(dir: &Path, cb: &Fn(&Path, &Path, &DirEntry)) -> Result<String> {
     if dir.is_dir() {
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
@@ -168,10 +168,13 @@ fn process_dirs(dir: &Path, cb: &Fn(&Path, &Path, &DirEntry)) -> Result<()> {
             }
         }
     }
-    Ok({})
+    Ok(String::from("Process finalized"))
 }
 
-pub fn run(path_object: &Path) -> Result<()> {
+pub fn run(path_object: &Path) -> Result<String> {
+    if path_object.display().to_string().trim() == "" {
+       panic!("The path that you sent is empty")
+    }
     Commit::run_init_repo(&path_object);
     process_dirs(&path_object, &manage_dirs)
 }
