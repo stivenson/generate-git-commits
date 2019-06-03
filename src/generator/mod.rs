@@ -133,15 +133,20 @@ fn manage_dirs(path_project: &Path, dir: &Path, entry: &DirEntry) {
         let system_time = metadata.modified();
         match system_time {
             Ok(n) => {
-                let date_time = Commit::system_time_to_date_time(&n);
-                let commit: Commit = Commit::new(&dir.display().to_string(), &path_project.display().to_string(), &date_time.to_string());
-                let exe = commit.run_git_command();
-                match exe {
-                    Ok(_n) => {
-                        println!("Completed iteration");
-                    },
-                    Err(_) => panic!("Unknown error in iteration"),
+                if !((&dir.display().to_string()).contains(".git/")) {
+                    let date_time = Commit::system_time_to_date_time(&n);
+                    let commit: Commit = Commit::new(&dir.display().to_string(), &path_project.display().to_string(), &date_time.to_string());
+                    let exe = commit.run_git_command();
+                    match exe {
+                        Ok(_n) => {
+                            println!("Completed iteration");
+                        },
+                        Err(_) => panic!("Unknown error in iteration"),
+                    }
+                } else {
+                    println!(".git's file omited")
                 }
+
             },
             Err(_) => panic!("SystemTime before UNIX EPOCH!"),
         }
