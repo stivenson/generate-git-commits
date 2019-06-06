@@ -21,6 +21,8 @@ macro_rules! result_commit {
 
 // DOC DEVELOPERS: more info about designators to macros: https://doc.rust-lang.org/rust-by-example/macros/designators.html
 
+const COMMANDS_VECTOR: &'static [&'static str] = &[" cd ", " && ( git add ", " || true ) && ( git commit -m ", " || true ) && ( git commit --amend --no-edit --date "," || true )"," && rm -rf .git && git init "];
+
 struct Commit {
     pub relative_path_file: String,
     pub path_project: String,
@@ -47,7 +49,7 @@ trait Script {
 
 impl Commit {
     fn run_init_repo(path_object: &Path) {
-        let init_commands = "cd ".to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &path_object.display().to_string(), &QUOTATION_MARK).to_string()+&" && rm -rf .git && git init ".to_owned();
+        let init_commands = "cd ".to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &path_object.display().to_string(), &QUOTATION_MARK).to_string()+&COMMANDS_VECTOR[5].to_owned();
         let mut options = ScriptOptions::new();
         options.runner = None; // The script runner, for example bash. By default for windows it's cmd.exe and for other systems it is sh.
         options.capture_output = true; // True to capture and return the output. False will print it to the parent process output.
@@ -78,6 +80,7 @@ impl Commit {
 }
 
 impl Script for Commit {
+
     fn new(relative_path_file: &String, path_project: &String, date_commit: &String) -> Commit {
         Commit {
             relative_path_file: relative_path_file.to_string(),
@@ -110,7 +113,7 @@ impl Script for Commit {
 
     fn run_git_command(&self) -> Result<()> {
         let mut options = ScriptOptions::new();
-        let big_commands = "cd ".to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &self.path_project(), &QUOTATION_MARK).to_string()+&" && ( git add ".to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &self.relative_path_file(), &QUOTATION_MARK).to_string()+&" || true ) && ( git commit -m ".to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &self.message(), &QUOTATION_MARK).to_string()+&" || true ) && ( git commit --amend --no-edit --date ".to_owned()+&format!("{}{}{}", &QUOTATION_MARK, &self.date_commit(), &QUOTATION_MARK).to_string()+&" || true )".to_owned();
+        let big_commands = COMMANDS_VECTOR[0].to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &self.path_project(), &QUOTATION_MARK).to_string()+&COMMANDS_VECTOR[1].to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &self.relative_path_file(), &QUOTATION_MARK).to_string()+&COMMANDS_VECTOR[2].to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &self.message(), &QUOTATION_MARK).to_string()+&COMMANDS_VECTOR[3].to_owned()+&format!("{}{}{}", &QUOTATION_MARK, &self.date_commit(), &QUOTATION_MARK).to_string()+&COMMANDS_VECTOR[4].to_owned();
         options.runner = None; // The script runner, for example bash. By default for windows it's cmd.exe and for other systems it is sh.
         options.capture_output = true; // True to capture and return the output. False will print it to the parent process output.
         options.exit_on_error = false; // Adds set -e option (not available for windows)
