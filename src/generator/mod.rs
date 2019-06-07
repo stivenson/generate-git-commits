@@ -30,17 +30,10 @@ struct Commit {
     pub date_commit: String,
 }
 
-struct ResultCommand {
-    pub code: i32,
-    pub output: String,
-    pub error: String,
-}
-
 trait Script {
 
     fn new(relative_path_file: &String, path_project: &String, date_commit: &String) -> Self; 
     fn run_git_command(&self) -> Result<()>;
-    fn result(&self, code: i32,output: String, error: String) -> ResultCommand;
     fn relative_path_file(&self) -> &String;
     fn path_project(&self) -> &String;
     fn message(&self) -> &String;
@@ -103,14 +96,6 @@ impl Script for Commit {
         &self.date_commit
     }
 
-    fn result(&self, code: i32,output: String, error: String) -> ResultCommand {
-        ResultCommand {
-            code: code, 
-            output: output,
-            error: error
-        }
-    }
-
     fn run_git_command(&self) -> Result<()> {
         let mut options = ScriptOptions::new();
         let big_commands = COMMANDS_VECTOR[0].to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &self.path_project(), &QUOTATION_MARK).to_string()+&COMMANDS_VECTOR[1].to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &self.relative_path_file(), &QUOTATION_MARK).to_string()+&COMMANDS_VECTOR[2].to_owned()+&format!("{}{}{}",&QUOTATION_MARK, &self.message(), &QUOTATION_MARK).to_string()+&COMMANDS_VECTOR[3].to_owned()+&format!("{}{}{}", &QUOTATION_MARK, &self.date_commit(), &QUOTATION_MARK).to_string()+&COMMANDS_VECTOR[4].to_owned();
@@ -124,8 +109,8 @@ impl Script for Commit {
             &args,
             &options
         ).unwrap();
+        result_commit!(code, output, error);
         println!("File: {:?}", &self.relative_path_file());
-        self.result(code, output, error);
         Ok({})
     }
 
