@@ -1,13 +1,10 @@
 extern crate chrono;
 extern crate run_script;
 
-use std::path::Path;
-use std::io::Result;
+use std::{path::Path, io::Result, fs::{self, DirEntry}, time::{SystemTime, UNIX_EPOCH}};
 use chrono::{DateTime, UTC};
 use crate::generator::chrono::TimeZone;
 use run_script::ScriptOptions;
-use std::fs::{self, DirEntry};
-use std::time::{SystemTime, UNIX_EPOCH};
 
 const QUOTATION_MARK: &str = "\"";
 
